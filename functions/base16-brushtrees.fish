@@ -34,12 +34,12 @@ function base16-brushtrees -d "Brush Trees"
     function put_template; printf '\033Ptmux;\033\033]4;%d;rgb:%s\033\033\\\033\\' $argv; end;
     function put_template_var; printf '\033Ptmux;\033\033]%d;rgb:%s\033\033\\\033\\' $argv; end;
     function put_template_custom; printf '\033Ptmux;\033\033]%s%s\033\033\\\033\\' $argv; end;
-  else if string match 'screen*' $TERM # [ "${TERM%%[-.]*}" = "screen" ]
+  else if string match -q 'screen*' $TERM # [ "${TERM%%[-.]*}" = "screen" ]
     # GNU screen (screen, screen-256color, screen-256color-bce)
     function put_template; printf '\033P\033]4;%d;rgb:%s\007\033\\' $argv; end;
     function put_template_var; printf '\033P\033]%d;rgb:%s\007\033\\' $argv; end;
     function put_template_custom; printf '\033P\033]%s%s\007\033\\' $argv; end;
-  else if string match 'linux*' $TERM # [ "${TERM%%-*}" = "linux" ]
+  else if string match -q 'linux*' $TERM # [ "${TERM%%-*}" = "linux" ]
     function put_template; test $argv[1] -lt 16 && printf "\e]P%x%s" $argv[1] (echo $argv[2] | sed 's/\///g'); end;
     function put_template_var; true; end;
     function put_template_custom; true; end;
@@ -89,7 +89,7 @@ function base16-brushtrees -d "Brush Trees"
     put_template_var 10 $colorfg
     if [ "$BASE16_SHELL_SET_BACKGROUND" != false ]
       put_template_var 11 $colorbg
-      if string match 'rxvt*' $TERM # [ "${TERM%%-*}" = "rxvt" ]
+      if string match -q 'rxvt*' $TERM # [ "${TERM%%-*}" = "rxvt" ]
         put_template_var 708 $colorbg # internal border (rxvt)
       end
     end
